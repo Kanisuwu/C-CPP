@@ -12,7 +12,6 @@ void showfr(FILE *stream) {
         c = fgetc(stream);
         printf("%c", c);
     }
-    int cord = ftell(stream);
 }
 
 int main(int argc, char *argv[]) {

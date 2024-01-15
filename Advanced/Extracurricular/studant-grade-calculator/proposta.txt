@@ -1,0 +1,8 @@
+Escreva um código que calcula a média dos estudantes.
+
+O programa deve:
+
+1 - Deixar o usuário entrar o número de estudantes.
+2 - Para cada estudante, deixar o usuário entrar o nome e suas três grades.
+3 - Calcular a média de cada estudante.
+4 - Mostrar os nomes, suas grades e a média de cada um.
