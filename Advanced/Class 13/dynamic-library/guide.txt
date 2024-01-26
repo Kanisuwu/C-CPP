@@ -1,0 +1,16 @@
+Different from static libraries, you have to actually use the gcc compiler to do that.
+
+1. gcc -g -fPIC(Compiler Option) main.c(code) -shared -o lib_mylib.so (or .dll);
+    > Remember to #include "you_header.h" inside the main.c of you library.
+
+2. Link the shared object with the main object file to create a executable.
+    > gcc -o main main.o -Ldll (for path of the dlls) -l _mylib (if the library is lib_mylib.so);
+
+3. Point the path of the libraries.
+    > LD_LIBRARY_PATH=/home/uwu/Documents/Coding/C/Advanced/Class\ 13/...:$LD_LIBRARY_PATH
+
+
+The compiler expects to find libraries in /usr/lib.
+    > /usr/lib/libthread.so for threads libraries.
+
+

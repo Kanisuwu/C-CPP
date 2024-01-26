@@ -1,0 +1,7 @@
+For linking a static library you can use these steps:
+1. Compile the library into a object file.
+2. ar rcs [output] [object files]
+
+you can use the flag -t into a .a file to see what object files are in there.
+
+3. Link it (In compile time or not) with the main program and ta-dah!
