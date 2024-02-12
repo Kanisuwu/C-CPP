@@ -43,22 +43,20 @@ int copyf(char* dest, char* src) {
     FILE* file = NULL;
     FILE* newfile = NULL;
     char filename[SIZE];
-    char destpath[SIZE];
+    char destpath[SIZE + 1];
     char ch;
 
     strlast(filename, src);
-    strcpy(destpath, dest);
-    strcat(destpath, PATH_SEPARATOR);
-    strcat(destpath, filename);
+    snprintf(destpath, SIZE + 1, "%s%s%s", dest, PATH_SEPARATOR, filename);
 
     file = fopen(src, "r");
     newfile = fopen(destpath, "w");
     if (!file) {
-        printf("Error while reading the file\n");
+        printf("Error while reading the file %s\n", src);
         exit(EXIT_FAILURE);
     }
     if (!newfile) {
-        printf("Error while creating the file\n");
+        printf("Error while creating the file %s\n", destpath);
         exit(EXIT_FAILURE);
     }
     while ((ch = fgetc(file)) != EOF) {
@@ -143,8 +141,8 @@ int filter_file(int numargs, char* filename, ...) {
 }
 
 // displays and copies recursively the file system
-void backup(char* dest, char* src, const char* exception) {
-    static int level = 0;
+void backup(char* dest, char* src, int level) {
+    char* exception = "backup";
     DIR* dir = opendir(src);
     struct dirent* file;
     struct stat info;
@@ -158,7 +156,7 @@ void backup(char* dest, char* src, const char* exception) {
 
     while((file = readdir(dir)) != NULL) {
         char dest_path[SIZE];
-        if(filter_file(1, file->d_name, "backup"))
+        if(filter_file(1, file->d_name, exception))
             continue;
         add_space(space_level, level);
         snprintf(src_path, SIZE, "%s%s%s", src, PATH_SEPARATOR, file->d_name);
@@ -173,7 +171,7 @@ void backup(char* dest, char* src, const char* exception) {
             snprintf(dest_path, SIZE, "%s%s%s", dest, PATH_SEPARATOR, file->d_name);
             printf("%s%s%s\n", space_level, file->d_name, PATH_SEPARATOR);
             level++;
-            backup(dest_path, src_path, exception);
+            backup(dest_path, src_path, level);
             level--;
         }
     }
@@ -199,5 +197,5 @@ int main (int argc, char* argv[]) {
     make_directory(fullpath, dir);
     // ./backup\dir
     snprintf(rel_path, SIZE + 2, "%s%s%s", fullpath, PATH_SEPARATOR, dir);
-    backup(rel_path, dest, folder);
+    backup(rel_path, dest, 0);
 }
