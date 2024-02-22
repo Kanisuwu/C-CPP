@@ -192,52 +192,141 @@ void left_shift(struct arr *arr) {
     arr->A[arr->length - 1] = temp;
 }
 
-struct arr merge(struct arr first, struct arr second) {
+int merge(struct arr first, struct arr second, struct arr *result) {
     int i = 0, j = 0, k = 0;
-    struct arr newArr;
-    newArr.A = NULL;
-    newArr.size = first.size + second.size;
-    newArr.length = first.length + second.length;
-    newArr.A = (int *)malloc(newArr.size * sizeof(int));
+    result->size = first.size + second.size;
+    result->length = first.length + second.length;
+    result->A = NULL;
+    result->A = (int *)malloc(sizeof(int) * result->size);
+    if (result->A == NULL)
+        return -1;
     while (i < first.length && j < second.length) {
         if (first.A[i] < second.A[j])
-            newArr.A[k++] = first.A[i++];
+            result->A[k++] = first.A[i++];
         else
-            newArr.A[k++] = second.A[j++];
+            result->A[k++] = second.A[j++];
     }
     for (; i < first.length; i++)
-        newArr.A[k++] = first.A[i];
+        result->A[k++] = first.A[i];
     for (; j < second.length; j++)
-        newArr.A[k++] = second.A[j];
+        result->A[k++] = second.A[j];
     
-    return newArr;
+    return 0;
 }
 
+int uni(struct arr first, struct arr second, struct arr *result) {
+    int i = 0, j = 0, k = 0;
+    int length = 0;
+    result->size = first.size + second.size;
+    result->A = NULL;
+    result->A = (int *)malloc(sizeof(int) * result->size);
+    if (result->A == NULL)
+        return -1;
+    while (i < first.length && j < second.length) {
+        if (first.A[i] < second.A[j]) {
+            result->A[k++] = first.A[i++];
+            length++;
+        }
+        else if (second.A[j] < first.A[i]) {
+            result->A[k++] = second.A[j++];
+            length++;
+        }
+        else {
+            result->A[k++] = first.A[i++];
+            j++;
+            length++;
+        }
+    }
+    for (; i < first.length; i++, length++)
+        result->A[k++] = first.A[i];
+    for (; j < second.length; j++, length++)
+        result->A[k++] = second.A[j];
+    result->length = length;
+    
+    return 0;
+}
+
+int intersec(struct arr first, struct arr second, struct arr *result) {
+    int i = 0, j = 0, k = 0;
+    int length = 0;
+    result->size = first.size + second.size;
+    result->A = NULL;
+    result->A = (int *)malloc(sizeof(int) * result->size);
+    if (result->A == NULL)
+        return -1;
+    while (i < first.length && j < second.length) {
+        if (first.A[i] == second.A[j]) {
+            result->A[k++] = first.A[i++];
+            length++;
+        }
+        else if (first.A[i] < second.A[j])
+            i++;
+        else
+            j++;
+        }
+    for (; i < first.length; i++, length++)
+        result->A[k++] = first.A[i];
+    result->length = length;
+    return 0;
+}
+
+int diff(struct arr first, struct arr second, struct arr *result) {
+    int i = 0, j = 0, k = 0;
+    int length = 0;
+    result->size = first.size + second.size;
+    result->A = NULL;
+    result->A = (int *)malloc(sizeof(int) * result->size);
+    if (result->A == NULL)
+        return -1;
+    while (i < first.length && j < second.length) {
+        if (first.A[i] < second.A[j]) {
+            result->A[k++] = first.A[i++];
+            length++;
+        }
+        else if (first.A[i] > second.A[j])
+            j++;
+        else {
+            i++;
+            j++;
+        }
+    }
+    for (; i < first.length; i++, length++)
+        result->A[k++] = first.A[i];
+    result->length = length;
+    return 0;
+}
 /*
  *  >>>>> MAIN CODE SECTION <<<<<
  */
 
 int main(void) {
+    int ch;
+    int x, index;
     struct arr Array;
     Array.size = 12;
     Array.length = 12;
     Array.A = (int *)malloc(Array.size * sizeof(int));
-    struct arr Array2;
-    Array2.size = 12;
-    Array2.length = 12;
-    struct arr merged;
-    Array2.A = (int *)malloc(Array2.size * sizeof(int));
 
-    for (int i = 0; i < Array.length; ++i) {
-        Array.A[i] = i + i;
-        Array2.A[i] = i * 5;
+    printf("Menu\n");
+    printf("1. Insert\n");
+    printf("2. Delete\n");
+    printf("3. Search\n");
+    printf("4. Sum\n");
+    printf("5. Display\n");
+    printf("6. Exit\n");
+
+    printf("\nEnter your choice: ");
+    scanf("%d", &ch);
+
+    switch (ch) {
+        case 1: 
+            printf("Enter an element and index: ");
+            scanf("%d%d", &x, &index);
+            insert(&Array, index, x);
+            break;
     }
+
     display(Array);
-    display(Array2);
-    merged = merge(Array, Array2);
-    display(merged);
-    free(merged.A);
     free(Array.A);
-    free(Array2.A);
     return 0;
 }
