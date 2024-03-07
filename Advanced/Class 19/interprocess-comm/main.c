@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <signal.h>
+
+void handler(int signum) {
+    printf("Cannot divide by zero.\n");
+    exit(EXIT_FAILURE);
+}
 
 int main(int argc, char* argv[]) {
 
@@ -18,5 +24,26 @@ int main(int argc, char* argv[]) {
     */
 
     /* SIGNALS */
+    //printf("Testint SIGSTOP\n");
+    //raise(SIGSTOP);
+    //printf("I am back!\n");
+    
+    /*
+    alarm(5);
+
+    for (int i = 1; i < 10; i++) {
+        printf("%d\n", i);
+        sleep(1);
+    }
+    */
+
+    /* void (*signal)( int sig, void (*handler) (int) )) (int); */
+    void (*sigHandler)(int) = signal(SIGFPE, handler);
+
+    if (sigHandler == SIG_ERR) {
+        perror("Signal error: ");
+        return 1;
+    }
+
     return 0;
 }
