@@ -1,0 +1,1 @@
+void wat(void);
