@@ -38,7 +38,11 @@ int main(int argc, char* argv[]) {
     */
 
     /* void (*signal)( int sig, void (*handler) (int) )) (int); */
-    void (*sigHandler)(int) = signal(SIGFPE, handler);
+    void (*sigHandler)(int) = signal(SIGINT, handler);
+
+    while (1) {
+        printf("A");
+    }
 
     if (sigHandler == SIG_ERR) {
         perror("Signal error: ");
