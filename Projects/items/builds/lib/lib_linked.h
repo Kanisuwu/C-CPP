@@ -1,11 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <stdint.h>
+#include <time.h>
+
+#define UUID_LENGTH 37
 
 /* The node itself. */
 struct node {
     char *name;
-    int uuid;
+    char *uuid;
     float price;
     int stock;
     struct node *next;
@@ -14,7 +19,7 @@ struct node {
 /* Used to be more compact the use of variables. */
 struct item {
     char *name;
-    int uuid;
+    char *uuid;
     float price;
     int stock;
 };
@@ -56,3 +61,4 @@ void flast(linked *head);
 /* Searches for item name. */
 int search(linked *head, char *item);
 
+int genuuid(char *uuid);
